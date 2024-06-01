@@ -1,0 +1,25 @@
+services:
+  database:
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: dreambig
+  backend:
+    build: .
+    ports:
+      - "5000:5000"
+      - "9229:9229"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/.pnpm-store
+    command: pnpm start:docker
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: mysql://root:root@database:3306/dreambig
+      PORT: 5000
+    
+
